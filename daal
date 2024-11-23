@@ -1,0 +1,244 @@
+# #karatsuba
+# def karatsuba(x,y):
+#     if x<10 or y<10:
+#         return x*y
+    
+#     n=max(len(str(x)),len(str(y)))
+#     half = n//2
+
+#     high_x = x//10**half
+#     high_y = y//10**half
+#     low_x = x%10**half
+#     low_y = y%10**half
+
+#     z0 = karatsuba(low_x,low_y)
+#     z1 = karatsuba((high_x+low_x),(high_y+low_y))
+#     z2 = karatsuba(high_x,high_y)
+
+#     return((z2*(10**(half*2)))+((z1-z2-z0)*(10**half))+z0)
+
+# n = int(input("Enter number : "))
+# result = karatsuba(n,n)
+# print(result)
+
+# job scheduling: 
+
+# def j_scheduling(tasks,n):
+#     tasks.sort(key = lambda x:x[1], reverse = True)
+#     max_deadline = max(task[0] for task in tasks)
+
+#     result = [-1]*max_deadline
+#     total_profit = 0
+
+#     for task in tasks:
+#         deadline = task[0]
+#         profit = task[1]
+
+#         for slot in range(deadline-1,-1,-1):
+#             if result[slot]==-1:
+#                 result[slot] = task
+#                 total_profit+= profit
+#                 break
+#     return result,total_profit
+
+# n= int(input("Enter number of tasks"))
+# tasks=[]
+# for i in range(n):
+#     deadline = int(input(f"Enter deadline for {i+1} : "))
+#     profit = int(input(f"Enter profits for task {i+1} : "))
+#     tasks.append((deadline,profit))
+
+# result = j_scheduling(tasks,n)
+# print(result)
+
+#dijikstra
+
+# import heapq
+# from collections import defaultdict
+
+# def network_delay_time(times,N,K):
+#     graph = defaultdict(list)
+#     for u,v,w in times:
+#         graph[u].append((v,w))
+    
+#     min_heap = [(0,K)]
+#     shortest_time ={}
+
+#     while min_heap:
+#         time,node = heapq.heappop(min_heap)
+
+#         if node in shortest_time:
+#             continue
+#         shortest_time[node] = time
+
+#         #neighbours
+#         for neighbours,t in graph[node]:
+#             if neighbours not in shortest_time:
+#                 heapq.heappush(min_heap,[t+time,neighbours])
+#     if(len(shortest_time)==N):
+#         return (max(shortest_time.values()))
+#     else:
+#         return -1
+    
+#     #input
+
+# N = int(input("Enter no of nodes: "))
+# m = int(input("Enter no of edges: "))
+# tasks = []
+
+# for i in range(m):
+#     u = int(input(f"Enter u for edge {i+1} : "))
+#     v = int(input(f"Enter v for edge {i+1} : "))
+#     w = int(input(f"Enter w for edge {i+1} : "))
+#     tasks.append([u,v,w])
+# K = int(input("Enter statring node: "))
+# result = network_delay_time(tasks,N,K)
+
+# print(result)
+    
+
+#floyd warshall
+# INF = float('inf')
+
+# def floyd_warshall(dist, n):
+#     for k in range(n):
+#         for i in range(n):
+#             for j in range(n):
+#                 dist[i][j] = min(dist[i][j],(dist[i][k]+dist[k][j]))
+    
+#     print("Result matrix: ")
+#     for i in range(n):
+#         for j in range(n):
+#             if dist[i][j]=="INF":
+#                 print("INf", end= "\t")
+#             else:
+#                 print(dist[i][j], end="\t")
+#         print()
+
+# def main():
+#     n = int(input("Enter no of ciites: "))
+#     dist= []
+#     print("Enter the matrix in A0 form also if no direct connect enter inf")
+#     for i in range(n):
+#         row = input().split()
+#         row = [INF if x =='inf' else int(x) for x in row]
+#         dist.append(row)
+    
+#     floyd_warshall(dist,n)
+
+# if __name__ == "__main__":
+#     main()
+    
+
+#knight_tour
+
+
+def is_move_valid(x,y,N, board):
+    return 0<=x<N and 0<=y<N and board[x][y]==-1
+
+def print_solution(board,N):
+    for row in board:
+        for cell in row:
+            print(f"{cell:2}", end ="\t")
+        print()
+
+def solve_knight_tour(start_x,start_y, N):
+    board=[[-1 for _ in range(N)] for _ in range(N)]
+    move_x=[2,1,-1,-2,-2,-1,1,2]
+    move_y=[1,2,2,1,-1,-2,-2,-1]
+    board[start_x][start_y]=0
+    if not solve_knight_tour_until(start_x,start_y, move_x, move_y, board, N, 1):
+        print("cannt find solution")
+    else:
+        print_solution(board,N)
+
+def solve_knight_tour_until(x,y,move_x,move_y,board,N,move_i):
+    if move_i ==N*N:
+        return True
+    for k in range(8):
+        next_x = x + move_x[k]
+        next_y = x+ move_x[k]
+        if is_move_valid(next_x,next_y,board,N):
+            board[next_x][next_y] = move_i
+            if solve_knight_tour_until(next_x,next_y,move_x,move_y,board,N,move_i+1):
+                return True
+            board[next_x][next_y] = -1
+    return False
+
+
+if __name__ =="__main__":
+    N = int(input("Enter size of board"))
+    start_x = int(input("Enter starting x : "))
+    start_y = int(input("Enter starting y: "))
+
+    if 0<=start_x<N and 0<=start_y<N:
+        solve_knight_tour(start_x,start_y,N)
+    else:
+        print("invalid")
+
+
+
+
+
+
+#club assignment: 
+
+
+def get_cost_matrix():
+    N = int(input("Enter the number of students/clubs (N): "))
+    print("Enter the cost matrix (NxN) row by row, with each value separated by a space:")
+    cost_matrix = []
+    for i in range(N):
+        row = list(map(int, input(f"Row {i + 1}: ").split()))
+        cost_matrix.append(row)
+    return cost_matrix
+
+# Function to check if assigning the current student to the club is valid
+def is_valid_assignment(student, club, current_assignment):
+   
+    return club not in current_assignment
+
+def assign_clubs(student, current_cost, current_assignment, cost_matrix, N):
+    global min_cost, optimal_assignment
+    
+    if student == N:
+        if current_cost < min_cost:
+            min_cost = current_cost
+            optimal_assignment = current_assignment.copy()
+        return
+
+    
+    for club in range(N):
+       
+        if is_valid_assignment(student, club, current_assignment):
+            new_cost = current_cost + cost_matrix[student][club]
+            
+            
+            if new_cost < min_cost:
+               
+                current_assignment[student] = club
+                
+                assign_clubs(student + 1, new_cost, current_assignment, cost_matrix, N)
+                
+                current_assignment[student] = -1
+
+# Main function to start the club assignment
+def solve_club_assignment():
+    global min_cost, optimal_assignment
+    cost_matrix = get_cost_matrix()
+    N = len(cost_matrix)
+    
+    min_cost = float('inf')
+   
+    optimal_assignment = [-1] * N
+    
+    current_assignment = [-1] * N
+    
+    assign_clubs(0, 0, current_assignment, cost_matrix, N)
+    
+    # Output the result
+    print("Minimum Assignment Cost:", min_cost)
+    print("Optimal Assignment (Student to Club):", [x + 1 for x in optimal_assignment])
+
+solve_club_assignment()
+
